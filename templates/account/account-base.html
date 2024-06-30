@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block Account %}
+
+  <!-- Start My profile -->
+  <div class="my-profile">
+    <div class="container">
+        <div class="row justify-content-center align-items-strat g-5">
+            <div class="col-12 col-sm-4 text-center">
+                <div class="slid-bar">
+                    {% if request.user.picture %}
+                    <img style="width:150px; border-radius: 50%;border: 2px solid #fff;padding: 2px;"  src="{{request.user.picture.url}}" alt="">
+                    {% else %}
+                    <i class="fa-regular fa-user"></i>
+                    {% endif %}
+                    <div class="links mt-5">
+                        <ul class="mb-0 d-flex flex-column justify-content-center align-items-center gap-4">
+                            <li class="{% if  "/profile" in request.path %} active {% endif %}" ><a class="text-decoration-none fs-4" href="{% url 'my-profile' %}">حسابي</a></li>
+                            <li class="{% if  "/password" in request.path %} active {% endif %}" ><a class="text-decoration-none fs-4" href="{% url 'change-password' %}">تغيير كلمة المرور</a></li>
+                            <li class="{% if  "/articals" in request.path %} active {% endif %}"><a class="text-decoration-none fs-4" href="{% url 'my-articals' %}">مقالاتي</a></li>
+                            <li class="{% if  "/favorites" in request.path %} active {% endif %}"><a class="text-decoration-none fs-4" href="{% url 'my-favorites' %}">مفضلتي</a></li>
+                            <li class="{% if  "/our-books/" in request.path %} active {% endif %}"><a class="text-decoration-none fs-4" href="{% url 'logout' %}">تسجيل الخروج</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="blooger profile my-favorites-books col-12 col-sm-8 my-5">
+                {% block MyProfile %}
+                {% endblock MyProfile %}
+                {% block ChangePassword %}
+                {% endblock ChangePassword %}
+                {% block MyArticals %}
+                {% endblock MyArticals %}
+                {% block WriteArtical %}
+                {% endblock WriteArtical %}
+                {% block MyFavorites %}
+                {% endblock MyFavorites %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End My profile -->
+{% endblock Account %}

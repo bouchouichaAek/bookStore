@@ -1,0 +1,47 @@
+{% extends 'dashboard/dashboard-base.html' %}
+{% load static %}
+{% load filters %}
+
+{% block AllArticals %} 
+
+<div class="section-box articals mt-4">
+    <h1 class="title-overview fs-3 fw-bold pb-3 px-3">المقالات </h1>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mt-4 text-center table-bordered">
+            <th class="text-uppercase ">#</th>
+            <th class="text-uppercase ">عنوان المقال</th>
+            <th class="text-uppercase ">الكاتب</th>
+            <th class="text-uppercase ">نوع المقال</th>
+            <th class="text-uppercase ">الحالة</th>
+            <th class="text-uppercase ">سبب الرفض</th>
+            <th class="text-uppercase text-center">إطلع على المقال</th>
+            <th class="text-uppercase text-center">تعديل</th>
+            <th class="text-uppercase text-center">حذف</th>
+
+
+            </tr>
+            {% for artical in all_articals %}
+            <tr>
+                <th class="text-uppercase ">{{artical.pk}}</th>
+                
+                <td class="text-uppercase text-start">{{artical.artical_title}}</td>
+                <td class="text-uppercase">{{artical.artical_author.first_name}} {{artical.artical_author.last_name}}</td>
+                <td class=" text-uppercase">{{artical.artical_category}}</td>
+                <td class="text-uppercase {% if artical.artical_status == "نشر" %} publiched {% elif artical.artical_status ==  "قيد الانتظار" %} pending {% elif artical.artical_status ==  "مرفوض" %} rejected {% endif %} fw-medium">{{artical.artical_status}}</td>
+                <td class=" text-uppercase">{{artical.reason_of_reject}}</td>
+                <td class="text-uppercase text-center">
+                    <a href="{% url 'single-artical' artical.artical_title %}" target="_blank">إطلع على المقال</a>
+                </td>
+                <td class="text-uppercase text-center">
+                    <a class="edit" href="{% url 'edit-object' artical|app_name artical|model_name artical.pk%}">تعديل</a>
+                    
+                </td>
+                <td class="text-uppercase text-center">
+                    <a class="delete" href="{% url 'delete-object' artical|app_name artical|model_name artical.pk%}">حذف</a>        
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock AllArticals%}

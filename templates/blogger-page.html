@@ -1,0 +1,64 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load filters %}
+
+
+{% block LandingBlogger  %}
+        <!-- Start Landing -->
+        <div class="blooger landing">
+            <div class="overlay"></div>
+            <div class="container">
+                <h1 class="landing-title position-relative text-white fw-bold">مدونة
+                    دار القبس</h1>
+            </div>
+        </div>
+        <!-- End Landing -->
+{% endblock LandingBlogger %}
+
+{% block BloggerPage %}
+
+{% block Articals %}
+
+ <!-- Start Artical Section -->
+
+ <div class="articals-section my-5">
+    <div class="container">
+        <div class="boxes position-relative">
+            {% for artical in articals %}
+            <div class="box">
+                <a href="{% url 'single-artical' artical.artical_title|remove_spaces %}" class="text-decoration-none">
+                    <div class="img">
+                        <img src="{{ artical.artical_picture.url }}" alt="">
+                        <div class="text">
+                            <p class="category">{{artical.artical_category}}</p>
+                            <h1 class="title">{{artical.artical_title}}</h1>
+                            <div class="info d-flex justify-content-between align-items-center">
+                                <div class="author d-flex justify-content-center align-items-center gap-2">
+                                    <i class="fa-solid fa-pencil pb-2"></i>
+                                    <p>{{artical.artical_author.first_name}} {{artical.artical_author.last_name}}</p>
+                                </div>
+                                <div class="date d-flex justify-content-center align-items-center gap-2">
+                                    <i class="fa-regular fa-calendar-days pb-3"></i>
+                                    <p> {{artical.artical_date_add |date:'d M Y'}}</p>
+                                </div>
+                            </div>
+                            <div class="text-content">
+                                <p> {{artical.artical_body | striptags|safe | slice:":100"}}...</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="button">
+            <a class="text-decoration-none text-white" href="">عرض المزيد</a>
+        </div>
+    </div>
+</div>
+<!-- Start Artical Section -->
+
+
+{% endblock Articals %}
+
+{% endblock BloggerPage %}

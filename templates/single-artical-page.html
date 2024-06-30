@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load filters %}
+
+
+{% block singleArticalLanding %}
+
+ <!-- Start Landing -->
+ <div class="single-artical landing " style="background-image: url({{artical.artical_picture_body.url}});">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="artical-info position-relative">
+            <img src="{{artical.artical_picture_body.url}}" alt="" srcset="">
+            <h1 class="title text-white fw-bold mt-4 ">{{artical.artical_title}}</h1>
+            <div class="cate-date mt-4 d-flex justify-content-between align-items-center text-white fw-bold">
+                <p class="category fs-5">{{artical.artical_category}}</p>
+                <div class="date d-flex justify-content-between align-items-center gap-2 fs-5">
+                    <i class="fa-regular fa-calendar-days pb-3"></i>
+                    <p class="date-text"> {{artical.artical_date_add|date:'d M Y'}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Landing -->
+
+{% endblock singleArticalLanding %}
+
+
+
+{% block singleArticalPage %}
+
+{% block Artical %}
+<!-- Start Artical Section -->
+<div class="artical-section my-5" >
+    <div class="container">
+        <div class="row justify-content-center  align-items-start g-5">
+            <div class="col-12 col-lg-7">
+                <div class="artical-body">
+                    <p class="lh-base">{{artical.artical_body|safe}}</p>
+                </div>
+                <div class="publish-artcial d-flex justify-content-start align-items-start">
+                    <p class="lable fs-5 fw-bold ">انشر :</p>
+                    <ul class="fs-6 mt-1 d-flex justify-content-center align-items-center gap-3">
+                        <li><a class="text-decoration-none" href=""><i class="fa-brands fa-facebook fa-xl"></i></a>
+                        </li>
+                        <li><a class="text-decoration-none" href=""><i class="fa-brands fa-twitter fa-xl"></i></a>
+                        </li>
+                        <li><a class="text-decoration-none" href=""><i class="fa-brands fa-instagram fa-xl"></i></a>
+                        </li>
+                        <li><a class="pdf text-decoration-none fw-bold text-white" href="">PDF</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class=" col-12 col-lg-5">
+                <div class="other-artical">
+                    <h3 class="title fw-bold mb-4">مقالات أخرى</h3>
+                    {% for artical in outherartical %}
+                        <div class="box-artical mb-2">
+                            <a class="text-decoration-none d-flex justify-content-start align-items-center gap-4"
+                                href="{% url 'single-artical' artical.artical_title|remove_spaces %}">
+                                <img src="{{artical.artical_picture_body.url}}" alt="" srcset="">
+                                <div class="info">
+                                    <h3 class="title-artical fw-bold">{{artical.artical_title}}</h3>
+                                    <div class="date d-flex justify-content-start align-items-center gap-3">
+                                        <i class="fa-regular fa-calendar-days pb-3"></i>
+                                        <p class="date-text fw-bold"> {{artical.artical_date_add|date:'d M Y'}}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Artical Section -->
+{% endblock Artical %}
+{% endblock singleArticalPage %}

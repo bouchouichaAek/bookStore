@@ -1,0 +1,60 @@
+{% extends 'dashboard/dashboard-base.html' %}
+{% load static %}
+
+
+
+{% block ShowObject %}     
+<div class="section-box books-list mt-4">
+    <h1 class="title-overview fs-3 fw-bold px-3">عرض الطلب الخاص بالزبون
+        <span style="color: var(--primary-color);"> {{order.customer}} </span>
+    </h1>
+    <div class="order-info mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="title-overview fs-5 fw-bold px-3">التفاصيل الشخصية</h4>
+                <ul class="my-3">
+                    <li class="my-2">الاسم : {{order.customer}}</li>
+                    <li class="my-2">الولاية : {{order.stats}}</li>
+                    <li class="my-2">العنوان : {{order.address_complete}}</li>
+                    <li class="my-2">الهاتف : {{order.phone_number}}</li>
+                    <li class="my-2">البلدية : {{order.city}}</li>
+                    <li class="my-2">الرمز البريدي : {{order.postal_code}}</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h4 class="title-overview fs-5 fw-bold px-3">تفاصيل الطلب</h4>
+                <ul class="my-3">
+                    <li>التاريخ : {{order.order_date|date}}</li>
+                    <li>التوقيت : {{order.order_date|time}}</li>
+                    <li> حالة السداد: {% if order.payment_status == 'Pending' %} قيد الانتظار {% elif order.payment_status == 'Paid' %} مدفوع {% else %} فشل الدفع {% endif %}
+                    <li>الحالة : {% if order.status == 'Pending' %} قيد الأنتظار {% elif order.status == 'Processed' %} تمت معالجته {% elif order.status == 'Shipped' %} تم شحنه {% else %} تم التوصيل {% endif %}
+                </ul>    
+            </div>          
+    </div>  
+    <div class="mt-5"> 
+        <h4 class="title-overview fs-5 fw-bold px-3">الكتب المطلوبة</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>الكتاب</th>
+                    <th>الصورة</th>
+                    <th>الكمية</th>
+                    <th>السعر</th>
+                    <th>السعر الكلي</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                <tr>
+                    <td>{{ item.product.book_title }}</td>
+                    <td><img src="{{ item.product.book_picture.url }}" alt="{{ item.product.book_title }}" style="width: 100px;"></td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.book_price }} دج</td>
+                    <td>{{ item.total_price }} دج</td>
+                </tr>
+                {% endfor %}
+    </div>        
+
+</div>          
+
+{% endblock ShowObject%}

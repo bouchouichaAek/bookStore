@@ -1,0 +1,122 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load filters %}
+
+
+{% block LandingOurBooks %}
+ <!-- Start Landing -->
+ <div class="our-books landing">
+    <div class="overlay"></div>
+    <div class="container">
+        <h1 class="landing-title position-relative text-white fw-bold">إصدارات دار
+            القبس</h1>
+    </div>
+</div>
+<!-- End Landing -->
+{% endblock LandingOurBooks %}
+
+
+{% block OUrBooks %}
+
+{% block Filter %}
+
+    <!-- Start Filters -->
+    <div class="filters my-5">
+        <div class="container">
+            <form action="" method="get">              
+                <div class="box author d-flex justify-content-center align-items-center">
+                    <h1 class="fs-5 ms-3 pt-2 fw-bold">مؤلف الكتاب </h1>
+                    {{filter.form.book_author}}
+                </div>
+                <div class="box year d-flex justify-content-center align-items-center">
+                    <h1 class="fs-5 ms-3 pt-2 fw-bold">سنة النشر </h1>
+                    {{filter.form.book_year_published}}
+
+                </div>
+                <div class="box category d-flex justify-content-center align-items-center">
+                    <h1 class="fs-5 ms-3 pt-2 fw-bold">تصنيف الكتاب </h1>
+                    {{filter.form.book_category}}
+                </div>
+                <input type="submit" value="أذهب">
+            </form> 
+        </div>
+    </div>
+    <!-- End Filters -->
+{% endblock Filter %}
+
+
+{% block BooRelease %}
+
+    <!-- Start Books Release -->
+    <div class="release-books my-5">
+        <div class="container">
+            <div
+                class="header my-4 d-flex flex-column flex-md-row justify-content-between align-items-center py-0 px-3">
+                <p class="text-white mt-3 count">تم ايجاد <span class="fw-bold">{{books.count}}</span> كتاب</p>
+                <div class="sort-by dropdown">
+                    <button class="filters btn btn-secondary dropdown-toggle border-white border-bottom pb-2"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false">ترتيب
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">الأكثر قراءة</a></li>
+                        <li><a class="dropdown-item" href="">الأكثر مبيعا</a></li>
+                        <li><a class="dropdown-item" href="">الأعلى تقييما</a></li>
+                        <li><a class="dropdown-item" href="">السعر من الاعلى إلى الاقل</a></li>
+                        <li><a class="dropdown-item" href="">السعر من الاقل إلى الاعلى</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="books-release-content my-5">
+                <div class="boxes">
+                    {% for book in books %}
+                    <div class="box">
+                        {% if request.user.is_authenticated %}
+                            {% if request.user|is_favorite:book %}
+                                <form action="{% url 'remove_from_favorites' book.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="fav-button" type="submit"><i class=" fa-solid fa-heart liked"></i></button>
+                                </form>
+                            {% else %}
+                                <form action="{% url 'add_to_favorites' book.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="fav-button" type="submit"><i class=" fa-solid fa-heart"></i></button>
+                                </form>
+                                {% endif %}
+                        {% else %}
+                          <form action="{% url 'remove_from_favorites' book.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="fav-button" type="submit"><i class=" fa-solid fa-heart"></i></button>
+                                </form>
+                        {% endif %}
+                        <a href="{% url 'single-book' book.book_title|remove_spaces %}" class="text-decoration-none">
+                            <img src="{{book.book_picture.url}}" alt="">
+                            <div class="text mb-5">
+                                <h1 class="categiory fs-5 fw-medium mt-4">{{book.book_category}}</h1>
+                                <h1 class="title fs-5 {% if book.book_title|length > 26 %} mb-5 {% else %} mb-2 {% endif %} fw-bold">{{book.book_title }}</h1>
+                                <h1 class="title fs-6 fw-bold">{{book.book_subtitle }}</h1>
+                            </div>
+                        </a>
+                            <div class="price-cart">
+                                <button hx-get="{% url 'add_to_cart' book.pk  %}" hx-target="#menu-cart-button" hx-swap="innerHTML" class="cart border border-0">أضف إلى السلة</button>
+                                {% comment %} <p class="cart"></p> {% endcomment %}
+                                <p class="price">{{book.book_price}} دج</p>
+                            </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if books.count > 6 %}
+                    <div class="button">
+                        <div class="container">
+                            <a class="text-decoration-none text-white" href="">عرض المزيد</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- End Books Release -->
+
+{% endblock BooRelease %}
+
+{% endblock OUrBooks %}
+

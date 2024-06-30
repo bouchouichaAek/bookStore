@@ -1,0 +1,44 @@
+{% extends './account-base.html' %}
+{% load static %}
+
+
+{% block WriteArtical %}
+{% for message in messages %}
+{% if message.extra_tags == "success" %}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+   {% endif %}
+{% endfor %}
+<div class="profile-header mt-5 d-flex justify-content-between align-items-start">
+    <h1 class="title fw-semibold">أكتب مقالا</h1>
+
+</div>
+<div class="profile-form write-artical">
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+       
+        <div class="box artical-title">
+            <label for="username">{{form.artical_title.label}} :</label>
+            {{form.artical_title}}
+        </div>
+        <div class="box artical-category">
+            <label for="firtsname">{{form.artical_category.label}} :</label>
+            {{form.artical_category}}
+        </div>
+        <div class="box artical-body align-items-start">
+            <label for="lastname">{{form.artical_body.label}} :</label>
+            {{form.artical_body}}
+        </div>
+        <div class="box artical-picture">
+            <label for="email">الصورة الرئيسية للمقال :</label>
+            {{form.artical_picture}}
+        </div>
+        <div class="box artical-picture-body">
+            <label for="email">الصورة محتوى المقال :</label>
+            {{form.artical_picture_body}}
+        </div>
+        <input type="submit" value="حفظ">
+    </form>
+</div>
+{% endblock WriteArtical %}

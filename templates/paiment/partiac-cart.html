@@ -1,0 +1,30 @@
+{% if cart|length > 0 %}
+
+{% for item in cart %}
+       {% if item %}
+       <div class="box d-flex justify-content-between align-items-center">
+                                        <div class="item-detail d-flex justify-content-start align-items-center gap-4">
+                                            <img src="{{item.book.book_picture.url}}" alt="">
+                                            <div class="item-decription">
+                                                <p class="category fw-bold">{{item.book.book_category}}</p>
+                                                <h4 class="title fw-bold">{{item.book.book_title}}</h4>
+                                                <p class="price">{{item.book.book_price}} دج</p>
+                                            </div>
+                                        </div>
+                                        <div class="quntity-price">
+                                            <p class="price">{{item.total_price}} دج</p>
+                                            <div class="quntity">
+                                                <button hx-get="{% url 'update_cart' item.book.id 'increment' %}" hx-target="#cart-items" hx-swap="outerHTML"  type="button" name="quntity" id="quntity-add" class="plus">+</button>
+                                                <input type="number" value="{{item.quantity}}" name="" id="">
+                                                <button hx-get="{% url 'update_cart' item.book.id 'decrement' %}" hx-target="#cart-items" hx-swap="outerHTML" type="button" name="quntity" id="quntity-min"  class="mins">-</button>
+                                            </div>
+                                            <a hx-get="{% url 'remove-from-cart' item.book.id %}" class="text-decoration-none clear_from_cart" hx-target="#cart-items" hx-swap="outerHTML">حذف من العربة </a>
+                                        </div>
+                                    </div>
+        {% endif %}                                 
+{% endfor %}     
+
+{% else %}
+<h2 class="">عربة تسوقك فارغة عليك بالطلب كتب من متجرنا</h2>
+
+{% endif %}

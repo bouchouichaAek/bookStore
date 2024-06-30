@@ -1,0 +1,274 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% comment %} {% load humanize %} {% endcomment %}
+{% load filters %}
+
+
+{% block Checkout %}
+
+    <!-- Start Checkout -->
+    <div class="checkout">
+        <div class="container">
+            {% for message in messages %}
+                {% if message.extra_tags == "saveAddresError" %}
+                <div class="alert alert-warning" role="alert">
+                    {{message}}
+                    <a href="{% url 'login' %}" class="alert-link">تسجيل الدخول الأن</a>
+                </div>
+                {% endif %}
+                {% if message.extra_tags == "addressShippingDoesNotExist" %}
+                <div class="alert alert-warning" role="alert">
+                    <h3 class="fs-5 fw-meduim price"> {{message}} </h3>
+                </div>
+                {% endif %}
+            {% endfor %}
+            <div class="row justify-content-center align-items-start g-5">
+                <div class="col-12 col-lg-8">
+                    <div class="dilevery-address">
+                        <div class="header-dilevery-address d-flex justify-content-between align-items-center ">
+                            <h3 class="fs-4 fw-bold title">عنوان الشحن</h3>
+                        </div>
+                        <div class="content-dilevery-address mb-5 mt-2">
+                            {% if address %}
+                            <div class="content-dilevery-address-info d-flex justify-content-between align-items-center">
+                                <div class="text">
+                                    <h3 class="fs-6 mt-3 title">الإسم الكامل : {{address.first_name}} {{address.last_name}}</h3>
+                                    <h3 class="fs-6 mt-3 title">رقم الهاتف : {{address.phone_number}}</h3>
+                                    <h3 class="fs-6 mt-3 title">العنوان الكامل : {{address.address_complete}}</h3>
+                                    <h3 class="fs-6 mt-3 title">الولاية : {{address.stats.state_name}}</h3>
+                                </div>
+                                <a class="write-address text-decoration-none fs-5" onclick="document.getElementById('id01').style.display='block'">تغيير العنوان</a>
+                            </div>
+                            
+                            {% else %}
+                            
+                            <a class="write-address text-decoration-none fs-5" onclick="document.getElementById('id01').style.display='block'">اكتب عنوان الشحن</a>
+                            {% endif %}
+
+
+                            <!-- The Modal -->
+                            <div id="id01" class="modal">
+                                <span onclick="document.getElementById('id01').style.display='none'"
+                                class="close" title="Close Modal">&times;</span>
+                                
+                                <!-- Modal Content -->
+                                <form class="modal-content animate" action="" method="POST">
+                                    {% csrf_token %}
+                                    <div class="imgcontainer">
+                                        <h3 class="fs-3 fw-bold title">عنوان الشحن</h3>
+                                    </div>
+                                    
+                                    <div class="container">
+                                        <div class="state">
+                                            <label for="username" class="fs-4 mb-2 fw-bold title"> الولاية/المنطقة</label>
+                                            {{addres_form.stats}}
+                                        </div>
+                                        <h3 class="fs-4 fw-bold title mt-4">البيانات الشخصية</h3>
+                                        <div class="person-info d-flex justify-content-center align-items-center flex-wrap column-gap-3">
+                                            <div class="fw-bold firtsname flex-grow-1">
+                                                <label for="firtsname">إسم الأول :</label>
+                                                <input type="text" value="{{address.first_name}}" name="firtsname" id="firtsname" placeholder="إسم الأول">
+                                            </div>
+                                            <div class="fw-bold lastname flex-grow-1">
+                                                <label for="lastname">إسم العائلة :</label>
+                                                <input type="text" value="{{address.last_name}}" name="lastname" id="lastname" placeholder="إسم العائلة">
+                                            </div>
+                                            <div class="fw-bold firtsname flex-grow-1">
+                                                <label for="firtsname">رقم الهاتف :</label>
+                                                {{addres_form.phone_number}}
+                                            </div>
+                                        </div>
+                                        <h3 class="fs-4 fw-bold title mt-4">العنوان</h3>
+                                        <div class="address d-flex justify-content-center align-items-center flex-wrap column-gap-3">
+                                            <div class="fw-bold lastname flex-grow-1">
+                                                <label for="lastname">المدينة :</label>
+                                                {{addres_form.city}}
+                                            </div>
+                                            <div class="fw-bold lastname flex-grow-1">
+                                                <label for="lastname">الرقم البريدي :</label>
+                                                {{addres_form.postal_code}}
+                                            </div>
+                                            <div class="fw-bold lastname flex-grow-1">
+                                                <label for="lastname">العنوان الكامل :</label>
+                                                {{addres_form.address_complete}}
+                                            </div>
+                                        </div> 
+                                        <label>
+                                            <input type="checkbox" name="remember"> تعيين كعنوان شحن افتراضي
+                                        </label>
+                                        <div class="submit-box">
+                                           
+                                            <button type="submit">أدخل</button>
+                                        </div>
+                                    </div>  
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-methods-choise">
+                        <div class="header-payment-methods-choise d-flex justify-content-between align-items-center ">
+                            <h3 class="fs-4 fw-bold title">طرق السداد</h3>
+                        </div>
+                        <div class="content-payment-methods-choise mb-5 mt-2">
+  
+                            {% if payment %}
+                            <div class="content-dilevery-address-info d-flex justify-content-between align-items-center">
+                                <div class="text">
+                                    <h3 class="fs-6 mt-3 title">{{payment.payment}}</h3>
+                                    {{payment.status|safe}}
+                                </div>
+                                <a class="write-payment-methods text-decoration-none fs-5" onclick="document.getElementById('id02').style.display='block'">تغيير طريقة السداد</a>
+                            </div>
+                            
+                            {% else %}
+                            
+                            <a class="write-payment-methods text-decoration-none fs-5" onclick="document.getElementById('id02').style.display='block'">اختار طريقة الدفع</a>
+                            {% endif %}
+
+
+                            <!-- The Modal -->
+                            <div id="id02" class="modal">
+                                <span onclick="document.getElementById('id02').style.display='none'"
+                                class="close" title="Close Modal">&times;</span>
+                                
+                                <!-- Modal Content -->
+                                <form class="modal-content animate" action="{% url 'add-method-payment' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="imgcontainer">
+                                        <h3 class="fs-3 fw-bold title">طرق السداد</h3>
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="payment mb-4">
+                                            <label for="username" class="fs-5 mb-2 fw-bold title" > أختر طريقة الدفع</label>
+                                            <select name="select-payment-method" id="select-payment-method">
+                                                <option value="الدفع أون لاين*<h3 class='fs-6 title mb-4'>ادفع المبلغ مباشرة ببطاقة بنكية أو بطاقة الذهبية</h3> ">الدفع أون لاين</option>
+                                                <option value="الدفع عند الإستلام*<h3 class='fs-6 title mb-4'>سيتم دفع المبلغ بعد إستلام الكتاب</h3> ">الدفع عند الإستلام</option>
+                                            </select>
+                                        </div>
+                                        <div class="payment-method d-none" id="الدفع عند الإستلام">
+                                            <h3 class="fs-3 fw-bold title mb-4">الدفع عند الإستلام</h3>
+                                            <h3 class="fs-5 title mb-4">سيتم دفع المبلغ بعد إستلام الكتاب</h3> 
+                                        </div>
+                                        <div class="payment-method" id="الدفع أون لاين">
+                                            <h3 class="fs-3 fw-bold title mb-4">الدفع أون لاين</h3>
+                                            <h3 class="fs-5 title mb-4">ادفع المبلغ مباشرة ببطاقة بنكية أو بطاقة الذهبية</h3> 
+                                        </div>
+                                        <div class="submit-box">
+                                            <button type="submit">أدخل</button>
+                                        </div>
+                                    </div>  
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-items">
+                        <div class="header-cart-items d-flex justify-content-between align-items-center ">
+                            <h3 class="fs-4 fw-bold title">عربة التسوق</h3>
+                        </div>
+                        <div class="content-cart-items my-5">
+                            <div class="boxes">
+                                {% for  item in cart  %}
+                                <div class="box d-flex justify-content-between align-items-center">
+                                    <div class="item-detail d-flex justify-content-start align-items-center gap-4">
+                                        <img src="{{item.book.book_picture.url}}" alt="">
+                                        <div class="item-decription">
+                                            <p class="category fw-bold">{{item.book.book_category}}</p>
+                                            <h4 class="title fw-bold">{{item.book.book_title}}</h4>
+                                            <p class="price">{{item.book.book_price}} دج</p>
+                                        </div>
+                                    </div>
+                                    <div class="quntity-price ">
+                                        <p class="price">{{item.total_price}} دج</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="summary mb-5">
+                        <div class="header-summary ">
+                            <h3 class="fs-4 fw-bold title">الملخص</h3>
+                        </div>
+                        <div class="content-summary my-5">
+                            <div class="total-price-books d-flex justify-content-between align-items-center mb-2">
+                                <h3 class="fs-5 fw-meduim">المبلغ الإجمالي للكتب : </h3>
+                                <h3 class="fs-5 fw-meduim price"><span dir="ltr">{{cart.get_total_book_price|del_comma}}</span> دج</h3>
+                            </div>
+                            <div class="discount-price d-flex flex-column justify-content-start align-items-start my-3">
+                                <div class="discount-price-input">
+                                    {% if promo %}
+                                    <div class="text">
+                                        <h3 class="fs-5 title">كود الخصم : <b>{{promo.code.code}}</b></h3>
+                                        <h3 class="fs-5 mt-3 title">حصلت على خصم بنسبة : <b>{{promo.code.discount_percentage}}%</b></h3>
+                                    </div>
+                                    {% else %}
+                                    <h3 class=" fs-5 fw-meduim">كود الخصم : </h3>
+                                    <form class="d-flex justify-content-between align-items-center gap-2 my-1" action="{% url 'add-code-promo' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="text" name="code_promo" placeholder="أدخل كود الخصم هنا">
+                                        <input type="submit" value="احفظ">
+                                    </form>
+                                        {% for message in messages %}
+                                            {% if message.extra_tags == "codePromoError" %}
+                                            <div class="alert alert-warning mt-3" role="alert">
+                                                {{message}}
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                  
+                                </div>
+                            </div>
+                            <div class="total-price-delevery d-flex justify-content-between align-items-center">
+                                <h3 class="fs-5 fw-meduim">المبلغ الشحن : </h3>
+                                {% if address %}
+                                                  
+                                <h3 class="fs-5 fw-meduim price">{% if address.stats.delivery_price > 0 %}{{address.stats.delivery_price|del_comma}} دج{% else %}  مجاني {% endif %} </h3>
+                                {% else %}
+                                <h3 class="fs-5 fw-meduim price">لم يتم تحديد العنوان بعد </h3>
+                            
+                                {% endif %}
+                            </div>
+                            <div class="total-price d-flex justify-content-between align-items-center mt-5">
+                                <h3 class="fs-5 fw-bold">المبلغ الإجمالي : </h3>
+                                <h3 class=" fs-5 fw-bold price"><span dir="ltr">{{cart.get_total_price}}</span> دج</h3>
+                            </div>
+                            <div class="pay mt-4">
+                                
+                                <form action="{% url 'create_payment' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="submit" value="إكمال طلب الدفع" class="pay-link">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-methods mb-5">
+                        <div class="header-payment-methods">
+                            <h3 class="fs-4 fw-bold title">طرق الدفع</h3>
+                        </div>
+                        <div class="content-payment-methods pt-2">
+                            <div class="logo d-flex justify-content-start align-items-center gap-2">
+                                <img class="img barede-mob" style="width:30px" src="{% static 'img/paypal-logo-0.png' %}" alt="" srcset="">
+                                <img class="img barede-mob" src="{% static 'img/visa.png' %}" alt="" srcset="">
+                                <img class="img barede-mob" src="{% static 'img/master-card.png' %}" alt="" srcset="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="protect-custemer">
+                        <div class="header-protect-custemer">
+                            <h3 class="fs-4 fw-bold title">حماية المشتري</h3>
+                        </div>
+                        <div class="content-protect-custemer pt-2">
+                            <p class="fs-5">استرد أموالك فى حالة اختلاف المنتج عن الوصف أو لم يتم التسليم</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End Checkout -->
+{% endblock Checkout %}

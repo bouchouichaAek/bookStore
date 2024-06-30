@@ -1,0 +1,58 @@
+{% extends '../base/base.html' %}
+
+{% block Login %}
+<!-- Start sign in -->
+<div class="login sign-in my-5">
+    <div class="container">
+        {% for message in messages %}
+        {% if message.extra_tags == "PassChangeSuccess" %}
+            <div class="alert alert-success" role="alert">
+                {{message}}
+            </div>
+        {% endif %}
+        {% endfor %}
+        <div class="sign-in-header">
+            <h1 class="title">تسجيل الدخول</h1>
+            <i class="fa-regular fa-circle-user log-in"></i>
+        </div>
+        <div class="form">
+            <form action="" method="post">
+                {% csrf_token %}
+                <!-- <div class="box username">
+                    <label for="username">إسم المستخدم :</label>
+                    <input type="text" name="username" id="" placeholder="إسم المستخدم">
+                </div> -->
+                <div class="box email">
+                    <label for="email">{{form.email.label}} :</label>
+                    {{form.email}}
+                </div>
+                <div class="box password mb-3">
+                    <label for="password">{{form.password.label}}:</label>
+                    {{form.password}}
+                </div>
+                <div class="mb-4">
+                    {% for message in messages %}
+                    <div class="alert alert-danger p-2" role="alert">
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="checkbox-submit d-flex justify-content-between align-items-start">
+                    <div class="check">
+                        <label for="checkbox"> <a href="{% url 'forgot-password' %}" class="text-decoration-none fw-bold">نسيت كلمة
+                            المرور؟</a></label>
+                        </div>
+                        <input type="submit" value="تسجيل الدخول">
+                </div>
+                </form>
+                <div class="login">
+                    <p class="fw-semibold ">ليس لديك حساب ؟ <a href="{% url 'sign-up' %}" class="text-decoration-none">سجل
+                        الآن</a></p>
+                </div>
+        </div>
+    </div>
+</div>
+<!-- End sign in -->
+
+{% endblock Login %}

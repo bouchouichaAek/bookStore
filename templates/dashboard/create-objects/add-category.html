@@ -1,0 +1,26 @@
+{% extends 'dashboard/dashboard-base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
+{% block AddNewCategory %}   
+<div class="section-box books-list mt-4">
+    <h1 class="title-overview fs-3 fw-bold px-3"> أَضف نوعا جديدا من الكتب<span
+            style="color: var(--primary-color);">{% if instance_title.first_name %} {{instance_title.first_name}} {{instance_title.last_name}} {% else %} {{instance_title}} {% endif %}</span> </h1>
+    <div class="form">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            
+            {% buttons %}
+                <div class="button text-end d-flex justify-content-end align-items-center gap-3">
+                    <a class="btn cancel" href="{% url 'dashboard-main' %}">إلغاء</a>
+                    <input class="btn save" type="submit" value="حفظ">
+                </div>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>            
+{% endblock AddNewCategory %}

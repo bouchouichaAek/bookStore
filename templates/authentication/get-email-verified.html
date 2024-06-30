@@ -1,0 +1,29 @@
+{% extends '../base/base.html' %}
+{% load static %}
+
+
+
+{% block GetEmailVerified %}
+
+<div class="verification my-5">
+    <div class="container">
+       {% if request.user.is_verified  %}
+       <h1 class="text-center fw-bold is-verified">تم تفعيل حسابك بالنجاح</h1>
+       <img class="is-verified-img" src="{% static 'img/icons8-verified-96.png' %}" alt="">
+       {% else %}
+       
+       <h1 class="text-center fw-bold">تفعيل الحساب</h1>
+       <p class="text-center fs-5 mt-3">اضغط على الزر أدناه لتأكيد عنوان بريدك الإلكتروني و تفعيل حسابك </p>
+       <form class="text-center" action="" method="POST">
+           {% csrf_token %}
+           <input class="fs-4 px-5 py-2" type="submit" value="فعل حسابك الأن">
+       </form>
+
+       {% endif %}
+    </div>
+</div>
+    
+
+{% endblock GetEmailVerified %}
+
+

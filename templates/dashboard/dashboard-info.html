@@ -1,0 +1,73 @@
+{% extends 'dashboard/dashboard-base.html' %}
+{% load static %}
+{% load filters %}
+
+
+{% block AllstatesInfo %}           
+<div class="section-box books-list mt-4" id="category-books">
+    <div class="header d-flex justify-content-between align-items-center">
+        <h1 class="title-overview fs-3 fw-bold px-3">الولايات</h1>
+        <a href="{% url "add-state" %}">أضف ولاية جديدة</a>
+    </div>
+    <div class="">
+        <table class="table table-striped table-hover mt-4 text-center table-bordered">
+            <th class="text-uppercase ">#</th>
+            <th class="text-uppercase ">الولايات</th>
+            <th class="text-uppercase ">ثمن الشحن</th>
+            <th class="text-uppercase ">تعديل</th>
+            <th class="text-uppercase ">حذف</th>
+            </tr>
+           {% for state in all_states %}
+                <tr>
+                    <th class="text-uppercase ">{{state.pk}}</th>
+                    <th class="text-uppercase ">{{state.state_name}}</th>
+                    <th class="text-uppercase ">{{state.delivery_price}}</th>
+                    <td class="text-uppercase text-center">
+                        <a class="edit" href="{% url 'edit-object' state|app_name state|model_name state.pk%}">تعديل</a>
+                    </td>
+                    <td class="text-uppercase text-center">
+                        <a class="delete" href="{% url 'delete-object' state|app_name state|model_name state.pk%}">حذف</a>
+
+                    </td>
+                </tr>
+           {% endfor %}
+        </table>
+    </div>
+</div>    
+{% endblock AllstatesInfo%}
+
+
+{% block AllCodePromo %}           
+<div class="section-box books-list mt-4" id="category-books">
+    <div class="header d-flex justify-content-between align-items-center">
+        <h1 class="title-overview fs-3 fw-bold px-3">كودات التخفيضات</h1>
+        <a href="{% url "add-codepromo" %}">أضف كود التخفيض</a>
+    </div>
+    <div class="">
+        <table class="table table-striped table-hover mt-4 text-center table-bordered">
+            <th class="text-uppercase ">#</th>
+            <th class="text-uppercase ">كود التخفيض</th>
+            <th class="text-uppercase ">نسبة التخفيض (%)</th>
+            <th class="text-uppercase ">الحالة</th>
+            <th class="text-uppercase ">تعديل</th>
+            <th class="text-uppercase ">حذف</th>
+            </tr>
+           {% for code in all_codes %}
+                <tr>
+                    <th class="text-uppercase ">{{code.pk}}</th>
+                    <th class="text-uppercase ">{{code.code}}</th>
+                    <th class="text-uppercase ">{{code.discount_percentage}}</th>
+                    <th class="text-uppercase ">{% if code.is_valide %} مفعل {% else %} غير مفعل {% endif %}</th>
+                    <td class="text-uppercase text-center">
+                        <a class="edit" href="{% url 'edit-object' code|app_name code|model_name code.pk%}">تعديل</a>
+                    </td>
+                    <td class="text-uppercase text-center">
+                        <a class="delete" href="{% url 'delete-object' code|app_name code|model_name code.pk%}">حذف</a>
+
+                    </td>
+                </tr>
+           {% endfor %}
+        </table>
+    </div>
+</div>    
+{% endblock AllCodePromo%}

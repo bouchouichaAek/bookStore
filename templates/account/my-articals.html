@@ -1,0 +1,94 @@
+{% extends './account-base.html' %}
+{% load static %}
+{% load filters %}
+
+{% block MyArticals %}
+    <div class="blooger-header mt-5 d-flex justify-content-between align-items-start">
+        <h1 class="title fw-semibold">مقالاتي</h1>
+        <div class="image">
+            <a class="text-decoration-none" href="{% url 'write-article' %}">اكتب مقالا </a>
+        </div>
+    </div>
+    <div class="articals">
+        <h1 class="section-title my-5">مقالاتي المنشورة</h1>
+        <div class="box-articals published-aricacals">
+            {% if published_articals.count > 0 %}
+            <div class="boxes">
+                    {% for artical in published_articals %}
+                        <div class="box">
+                            <a href="{% url 'single-artical' artical.artical_title|remove_spaces %}" class="text-decoration-none">
+                                <div class="img">
+                                    <img src="{{artical.artical_picture.url}}" alt="">
+                                    <div class="text">
+                                       <div class="d-flex justify-content-between align-items-center" >
+                                            <p class="category">{{artical.artical_category}}</p>
+                                            <a class="edit-aricals text-decoration-none" href="{% url 'edit-article' artical.artical_title|remove_spaces %}">عدل المقال </a>
+                                       </div>
+                                        <h1 class="title">{{artical.artical_title}}</h1>
+                                        <div class="info d-flex justify-content-between align-items-center">
+                                            <div
+                                                class="date d-flex justify-content-center align-items-center gap-2">
+                                                <i class="fa-regular fa-calendar-days pb-3"></i>
+                                                <p> {{artical.artical_date_add|date:'d M Y'}}</p>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="text-content">
+                                            <p>كطاعون مرير؛ لا تزال آفة التَّسميات تُلازم صغار العُقول، ولا يزال
+                                                التَّسابق
+                                                نحوها
+                                                سقف
+                                                طموحاتهم . </p>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div>
+                    <h1 class="text-center">لم ينشر لك اي مقال بعد</h1>
+                </div>
+                {% endif %}
+        </div>
+        <h1 class="section-title my-5">مقالاتي الغير المنشورة بعد </h1>
+        <div class="box-articals published-aricacals">
+            {% if not_published_articals.count > 0 %}
+                <div class="boxes">
+                    {% for artical in not_published_articals %}
+                        <div class="box">
+                            <a href="{% url 'single-artical' artical.artical_title|remove_spaces %}" class="text-decoration-none">
+                                <div class="img">
+                                    <img src="{{artical.artical_picture.url}}" alt="">
+                                    <div class="text">
+                                        <p class="category">{{artical.artical_category}}</p>
+                                        <h1 class="title">{{artical.artical_title}}</h1>
+                                        <div class="info d-flex justify-content-between align-items-center">
+                                            <div
+                                                class="date d-flex justify-content-center align-items-center gap-2">
+                                                <i class="fa-regular fa-calendar-days pb-3"></i>
+                                                <p> {{artical.artical_date_add|date:'d M Y'}}</p>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="text-content">
+                                            <p>كطاعون مرير؛ لا تزال آفة التَّسميات تُلازم صغار العُقول، ولا يزال
+                                                التَّسابق
+                                                نحوها
+                                                سقف
+                                                طموحاتهم . </p>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div>
+                    <h1 class="text-center">ليست لديك اي مقالات غير منشورة</h1>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock MyArticals %}
+

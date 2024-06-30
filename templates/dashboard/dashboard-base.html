@@ -1,0 +1,229 @@
+{% load static %}
+{% load filters %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="icon" href="{% static 'img/logoipsum-299.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/alqabas.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  <!-- Fengyuan Chen's Datepicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
+</head>
+
+<body class="body">
+
+
+    <div class="dashboard main m-lg-4">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-start g-4">
+                <div class="col-12 col-sm-2 col-lg-3 ">
+                    <div class="dashboard-side-bar bg-white">
+                        <div class="logo text-center pt-5 pb-3">
+                            <img src="{% static "img/logoipsum-299.svg" %}" alt="" srcset="">
+                        </div>
+                        <div class="text-title text-center pb-5">
+                            <h1 class="fw-bold">لوحة التحكم</h1>
+                        </div>
+                        <div class="links pb-5">
+                            <ul>
+                                <li class="{% if request.resolver_match.url_name == 'dashboard-main' %} active {% endif %}">
+                                    <a class="text-decoration-none" href="{% url 'dashboard-main' %}"><i
+                                            class="fa-solid fa-gauge"></i><span>الرئيسية</span></a>
+                                </li>
+                                <li class="{% if  "/dashboard-books/" in request.path %} active {% endif %}">
+
+                                    <a class="text-decoration-none" href="{% url 'dashboard-books' %}"><i
+                                            class="fa-solid fa-book"></i><span>الكتب</span></a>
+                                </li>
+                                <li class="{% if  "/dashboard-books-order-published" in request.path %} active {% endif %}">
+                                    <a class="text-decoration-none" href="{% url "dashboard-books-order-published" %}">
+                                        <i class="fa-solid fa-book-medical"></i>
+                                        <span>الكتب المطلوبة لنشر</span></a>
+                                </li>
+                                <li class="{% if  "/dashboard-articals" in request.path %} active {% endif %}">
+                                    <a class="text-decoration-none" href="{% url 'dashboard-articals' %}"> <i
+                                            class="fa-solid fa-newspaper"></i><span>المقالات</span></a>
+                                </li>
+                                <li class="{% if  "/dashboard-users" in request.path %} active {% endif %}">
+                                    <a class="text-decoration-none" href="{% url 'dashboard-users' %}"> <i
+                                            class="fa-solid fa-users"></i><span>المستخدمين</span></a>
+                                </li>
+                                <li class="{% if  "/dashboard-info" in request.path %} active {% endif %}">
+                                    <a class="text-decoration-none" href="{% url 'dashboard-info' %}">
+                                        <i class="fa-solid fa-file-invoice"></i>
+                                    </i><span>معلومات الفواتير</span></a>
+                                </li>
+                                <li class="{% if  "/dashboard-order" in request.path %} active {% endif %}">
+                                    <a class="text-decoration-none" href="{% url "dashboard-order" %}"><i
+                                            class="fa-solid fa-sack-dollar"></i><span>طلبات الشراء</span></a>
+                                </li>
+                                <li>
+                                    <a class="text-decoration-none" href="{% url 'logout' %}"> <i
+                                            class="fa-solid fa-right-from-bracket"></i>
+                                        <span>تسجيل الخروج</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-10 col-lg-9">
+                    <div class="section-box header d-flex justify-content-between align-items-center">
+                        <div class="search-bar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" name="" id="" placeholder="ابحث هنا ...">
+                        </div>
+                        <div class="user-noti d-flex justify-content-between align-items-center">
+                            <a class="return-to-site" href="{% url 'home' %}">
+                                العودة إلى الموقع
+                            </a>
+                            <div class="">
+                                <a class="position-relative" onclick="toggleNotifi()"><span id="notifications-count"></span><i
+                                        class="fa-solid fa-bell fa-xl"></i></a>
+                                        <div class="notifi-box" id="box">
+                                            <h2>التنبيهات : <span class="text-black fw-bold" id="notifications-count-text">0</span>  </h2>
+                                            <div class="notifications-container">
+                                                
+                                            </div>
+                                        </div>
+                                    
+    
+                                <a href="">
+                                    {% if request.user.picture %}
+                                    <img style="width:40px; border-radius: 50%;border: 3px solid var(--primary-color);padding: 2px;"  src="{{request.user.picture.url}}" alt="">
+                                    {% else %}
+                                    <i class="fa-solid fa-circle-user fa-xl p-0"></i>
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% block OverView %}               
+                    {% endblock OverView%}
+                    {% block AllBooks %}               
+                    {% endblock AllBooks%}
+                    {% block AllBooksOrderPublished %}               
+                    {% endblock AllBooksOrderPublished%}
+                    {% block AllBooksCategories %}           
+                    {% endblock AllBooksCategories%}
+                    {% block AllUser %}               
+                    {% endblock AllUser%}
+                    {% block AllstatesInfo %}           
+                    {% endblock AllstatesInfo%}
+                    {% block AllCodePromo %}           
+                    {% endblock AllCodePromo%}
+                    {% block AllArticals %}               
+                    {% endblock AllArticals%}
+                    {% block AllOrders %}               
+                    {% endblock AllOrders%}
+                    {% block AddNewCategory %}               
+                    {% endblock AddNewCategory%}
+                    {% block EditObject %}               
+                    {% endblock EditObject%}
+                    {% block DeleteObject %}               
+                    {% endblock DeleteObject%}
+                    {% block ShowObject %}               
+                    {% endblock ShowObject%}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let url = `ws://${window.location.host}/ws/notifications/`
+        var ws = new WebSocket(url);
+        let notifications = []
+
+        ws.onopen = function() {
+            console.log('WebSocket connection opened');
+        };
+
+        ws.onmessage = function(event) {
+            var data = JSON.parse(event.data);
+            notifications.push(data);
+            let notifications_count = document.querySelector("#notifications-count")
+            let notifications_count_text = document.querySelector("#notifications-count-text")
+            let notifications_container = document.querySelector(".notifications-container")
+            notifications_container.innerHTML = "";
+            notifications_count.textContent = notifications.length
+            notifications_count_text.textContent = notifications.length
+            if(notifications.length > 0){
+                notifications_count.style.backgroundColor = "#724215"
+            }
+            notifications.forEach((element) => {
+                var box = document.createElement("div");
+                box.classList.add("notifi-item");
+              //  console.log(element)
+                if(!element.viewed){
+                    box.style.backgroundColor = "#378fe933" 
+                }
+                const dynamicUrl = "{% url 'dashboard-order-notification' 'parameter' %}".replace('parameter', element.order_id);
+
+                box.innerHTML = `
+                <div class="text">
+                    <a href="${dynamicUrl}" target="_blank"><p>${element.notification}</p></a>
+                  </div> 
+                 `
+                 notifications_container.append(box)
+            }
+            )
+            
+        };
+
+        ws.onclose = function() {
+            console.log('WebSocket connection closed');
+        };
+
+        $(function () {
+          $("#id_book_date_published").datepicker({
+            format: "yyyy-mm-dd",
+          });
+        });
+
+
+        var box  = document.getElementById('box');
+        var down = false;
+        
+        
+        function toggleNotifi(){
+            if (down) {
+                box.style.height  = '0px';
+                box.style.opacity = 0;
+                down = false;
+            }else {
+                box.style.height  = '370px';
+                box.style.opacity = 1;
+                down = true;
+            }
+        }
+
+      </script>
+
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/alqabas.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

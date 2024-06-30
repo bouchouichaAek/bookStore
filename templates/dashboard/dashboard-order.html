@@ -1,0 +1,57 @@
+{% extends 'dashboard/dashboard-base.html' %}
+{% load static %}
+{% load filters %}
+
+
+{% block AllOrders %}     
+<div class="section-box books-list mt-4">
+    <div class="header d-flex justify-content-between align-items-center">
+        <h1 class="title-overview fs-3 fw-bold px-3">طلبات الشراء</h1>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mt-4 text-center table-bordered">
+            <th class="text-uppercase ">#</th>
+            <th class="text-uppercase ">اسم الزبون</th>
+            <th class="text-uppercase ">رقم الهاتف</th>
+            <th class="text-uppercase ">ولاية الشحن</th>
+            <th class="text-uppercase ">بلدية الشحن</th>
+            <th class="text-uppercase ">عنوان الشحن</th>
+            <th class="text-uppercase ">الرمز البريدي</th>
+            <th class="text-uppercase ">حالة الشحن</th>
+            <th class="text-uppercase ">حالة الدفع</th>
+            <th class="text-uppercase ">المبلغ الكامل</th>
+            <th class="text-uppercase ">تاريخ الطلب</th>
+            <th class="text-uppercase ">عرض</th>
+            <th class="text-uppercase ">تعديل</th>
+            <th class="text-uppercase ">حذف</th>
+            </tr>
+           {% for order in all_order %}
+                <tr>
+                    <th class="text ">{{order.pk}}</th>
+                    <th class="text ">{{order.customer}}</th>
+                    <th class="text ">{{order.phone_number}}</th>
+                    <th class="text ">{{order.stats}}</th>
+                    <th class="text ">{{order.city}}</th>
+                    <th class="text ">{{order.address_complete}}</th>
+                    <th class="text ">{{order.postal_code}}</th>
+                    <th class="">{{order.status}}</th>
+                    <th class=" {% if order.payment_status == "Paid" %} publiched {% elif artical.artical_status ==  "Pending" %} pending {% elif artical.artical_status ==  "Failed" %} rejected {% endif %}">{{order.payment_status}}</th>
+                    <th class="text ">{{order.total_price}} دج</th>
+                    <th class="text ">{{order.order_date|date}}</th>
+                    <td class="text text-center">
+                        <a class="book-view" href="{% url 'show-object' order|app_name order|model_name order.pk%}">عرض</a>
+                    </td>
+                    <td class="text-uppercase text-center">
+                        <a class="edit" href="{% url 'edit-object' order|app_name order|model_name order.pk%}">تعديل</a>
+                    </td>
+                    <td class="text-uppercase text-center">
+                        <a class="delete" href="{% url 'delete-object' order|app_name order|model_name order.pk%}">حذف</a>
+
+                    </td>
+                </tr>
+           {% endfor %}
+        </table>
+    </div>
+</div>          
+
+{% endblock AllOrders%}

@@ -1,0 +1,87 @@
+{% extends './account-base.html' %}
+{% load static %}
+
+{% block MyProfile %}
+
+
+
+
+
+
+
+
+
+
+{% if not request.user.is_verified  %}
+<div class="alert alert-danger" role="alert">
+  من حسابك غير مفعل بعد سيتم تعطيله لا اذا لم يفعل خلال 30 يوما فعله من  <a href="{% url "verification" %}">  هنا  </a>
+</div>
+{% endif %}
+
+{% for message in messages %}
+{% if message.extra_tags == "success" %}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+   {% endif %}
+{% endfor %}
+<div class="profile-header mt-3 d-flex justify-content-between align-items-start">
+    <h1 class="title fw-semibold">حسابي</h1>
+    <div class="image d-flex flex-column justify-content-center align-items-center gap-2">
+        
+        <form action="{% url "add-picture-profile" %}" class="image d-flex flex-column justify-content-center align-items-center gap-2"  method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="id_picture_profile">
+                {% if request.user.picture %}
+                <img  src="{{request.user.picture.url}}" alt="">
+                {% else %}
+                <i class="fa-regular fa-user"></i>
+                {% endif %}
+              </label>
+            
+              <input id="id_picture_profile" type="file" name="picture_profile" />     
+            <button type="submit" class="image-btn">تغيير الصورة</button>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="profile-form">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="box username">
+            <label for="username">{{form.username.label}} :</label>
+            {{form.username}}
+        </div>
+        <div class="box firtsname">
+            <label for="firtsname">{{form.first_name.label}} :</label>
+            {{form.first_name}}
+        </div>
+        <div class="box lastname">
+            <label for="lastname">{{form.last_name.label}} :</label>
+            {{form.last_name}}
+        </div>
+        <div class="box email">
+            <label for="email">{{form.email.label}} :</label>
+            {{form.email}}
+        </div>
+        <div class="box gender">
+            <label for="email">{{form.gender.label}} :</label>
+            {{form.gender}}
+        </div>
+        <div class="box birthday">
+            <label for="email">{{form.birthday.label}} :</label>
+            {{form.birthday}}
+        </div>
+        {% for message in messages %}
+        {% if message.extra_tags == "errBirthday" %}
+            <div class="alert alert-danger py-0" role="alert">
+                <p class="">{{message}}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <input type="submit" value="حفظ">
+    </form>
+</div>
+{% endblock MyProfile %}

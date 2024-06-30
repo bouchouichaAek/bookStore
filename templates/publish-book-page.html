@@ -1,0 +1,144 @@
+{% extends 'base/base.html' %}
+
+
+{% block LandingPublishBook %}
+        <!-- Start Landing -->
+        <div class="publish-your-book landing">
+            <div class="overlay"></div>
+            <div class="container">
+                <h1 class="landing-title position-relative text-white fw-bold">أنشر مؤلفك مع
+                    دار القبس </h1>
+            </div>
+        </div>
+        <!-- End Landing -->
+{% endblock LandingPublishBook %}
+
+
+{% block PublishYourBookPage %}
+
+{% block PublishYourBookCondition %}
+
+    <!-- Start info -->
+    <div class="start-info my-5">
+        <div class="container">
+            {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{message}}
+              </div>
+            {% endfor %}
+            <p class="descrption">ترحب دار القبس للنشر والتوزيع بجميع المخطوطات بكافة أنواعها.
+                ضع يدك بأيدينا لنشر كتابك الأول أو كتابك العاشر، القبس تبحث عن مكامن الإبداع أينما كان. قد تستغرق عملية
+                الاطلاع والمراجعة بضعة أسابيع، وسيتم التواصل معك فور التوصل إلى قرار.</p>
+            <div class="box conditions">
+                <n2 class="title">1- شروط قبول مؤلفك</n2>
+                <ul>
+                    <li>
+                        <p>أن يكون ضمن اهتمام منشورات دار أثر، وهي: الأدب (روايةً، وشعرًا، وقصةً، ونصوصًا سردية،
+                            وترجمةً)، والأعمال النقدية، والدراسات الأدبية والسير الذاتية</p>
+                    </li>
+                    <li>
+                        <p>تقديمه في صياغته النهائية من الناحية الفنية واللغوية.</p>
+                    </li>
+                    <li>
+                        <p>إخطار دار أثر إن كان الكتاب منشورًا من قبل.</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="box step">
+                <n2 class="title">2- مراحل نشر مؤلفك</n2>
+                <ul>
+                    <li>
+                        <p>تعبئة النموذج الإلكتروني وإرفاق مخطوطة العمل، والسيرة الأدبية للمؤلف.</p>
+                    </li>
+                    <li>
+                        <p>اطلاع دار أثر على العمل.</p>
+                    </li>
+                    <li>
+                        <p>التواصل مع المؤلف بالقبول أو الرفض.</p>
+                    </li>
+                    <li>
+                        <p>الاتفاق النهائي وتوقيع العقد.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- End info -->
+{% endblock PublishYourBookCondition %}
+
+
+{% block PublishYourBookForm %}
+
+
+    <!-- Start Form -->
+    <div class="form">
+        <div class="container">
+            <h1 class="title">النموذج الإلكتروني</h1>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="box author-name">
+                    <label for="author_name">{{form.author_name.label}}<span>*</span>:</label>
+                    {{form.author_name}}      
+                </div>
+                <div class="box author-summary">
+                    <label for="email">{{form.author_summary.label}}<span>*</span>:</label>
+                    {{form.author_summary}}
+                </div>
+                <div class="box book-title">
+                    <label for="book_title">{{form.book_title.label}}<span>*</span>:</label>
+                    {{form.book_title}}
+                </div>
+                <div class="box book-subtitle">
+                    <label for="author_cv">{{form.book_subtitle.label}}:</label>
+                    {{form.book_subtitle}}               
+                </div>
+                <div class="box book-category">
+                    <label for="book_summary">{{form.book_category.label}}:</label>
+                    {{form.book_category}}                
+                </div>
+                <div class="box book-summary">
+                    <label for="email">{{form.book_summary.label}}<span>*</span>:</label>
+                    {{form.book_summary}}
+                </div>
+                <div class="box image">
+                    <label for="image_id"> صورة الغلاف :</label>
+                    <input name="image" type="file" class="form-control" id="image_id" accept="image/jpeg">
+                </div>
+
+                <div class="box email">
+                    <label for="email">{{form.email_address.label}}<span>*</span>:</label>
+                    {{form.email_address}}
+                </div>
+                <div class="box phone">
+                    <label for="phone">{{form.phone_number.label}}<span>*</span>:</label>
+                    {{form.phone_number}}
+                </div>
+                <div class="box facebook">
+                    <label for="facebook">{{form.facebook_account.label}}:</label>
+                    {{form.facebook_account}}                
+                </div>
+                <div class="box instagram">
+                    <label for="instagram">{{form.instgram_account.label}}:</label>
+                    {{form.instgram_account}}                
+                </div>
+                <div class="box twitter">
+                    <label for="twitter">{{form.twitter_account.label}}:</label>
+                    {{form.twitter_account}}                
+                </div>
+                <div class="box book">
+                    <label for="book_PDF_id"> الكتاب (PDF)<span>*</span>:</label>
+                    <input type="file" name="book_PDF" class="form-control" id="book_PDF_id"accept="application/pdf">
+                </div>
+                <div class="box btn">
+                    <input class="publish-your-book-btn" type="submit" value="سجل الكتاب">
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    <!-- End Form -->
+
+{% endblock PublishYourBookForm %}
+
+
+{% endblock PublishYourBookPage %}

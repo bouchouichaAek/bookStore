@@ -1,0 +1,67 @@
+{% extends '../base/base.html' %}
+
+
+{% block Registration %}
+
+  <!-- Start sign in -->
+  <div class="sign-in my-5">
+    <div class="container">
+        <div class="sign-in-header">
+            <h1 class="title">تسجيل مستخدم جديد</h1>
+            <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <div class="form">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="box username">
+                    <label for="username">{{form.username.label}} :</label>
+                    {{form.username}} 
+                </div>
+                <div class="box firtsname">
+                    <label for="firtsname">{{form.first_name.label}} :</label>
+                    {{form.first_name}}                
+                </div>
+                <div class="box lastname">
+                    <label for="lastname">{{form.last_name.label}} :</label>
+                    {{form.last_name}}       
+                </div>
+                <div class="box email">
+                    <label for="email">{{form.email.label}} :</label>
+                    {{form.email}}
+                </div>
+                <div class="box password1">
+                    <label for="password">{{form.password1.label}} :</label>
+                    {{form.password1}}
+                </div>
+                <div class="box password2">
+                    <label class="" for="password">{{form.password2.label}} :</label>
+                    {{form.password2}} 
+                </div>
+                {% for message in messages %}
+                <div class="alert alert-danger py-0 px-3 mb-4" role="alert">
+                   <p> {{message}} </p>
+                </div>
+                {% endfor %}
+            
+
+                <div class="checkbox-submit d-flex justify-content-between align-items-start">
+                    <div class="check">
+                        <input type="checkbox" name="checkbox" id="" required>
+                        <label for="checkbox">أوافق على <a href="{% url 'user-agreement' %}" class="text-decoration-none fw-bold">اتفاقية
+                                المستخدم</a></label>
+                        <p>يرجى الإطلاع على اتفاقية المستخد قبل التأكيد</p>
+                    </div>
+                    <input type="submit" value="التسجيل">
+                </div>
+            </form>
+            <div class="login">
+                <p class="fw-semibold ">لديك حساب بالفعل ؟ <a href="{% url 'login' %}" class="text-decoration-none">سجل
+                        الدخول
+                        الآن</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End sign in -->
+
+{% endblock Registration %}

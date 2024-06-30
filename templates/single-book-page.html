@@ -1,0 +1,230 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load filters %}
+
+{% block BookInfo %}
+<div class="book-info">
+    <div class="big-title-section">
+         <h1 class="title text-white fw-bold py-4 mb-4 text-center">{{book.book_title}} 
+            {% if book.book_subtitle  %}
+            - {{book.book_subtitle}} -
+            {% endif %}
+         </h1>
+    </div>
+    <div class="container">
+        {% for message in messages %}
+        {% if message.extra_tags == "AddComments" %}
+            <div class="alert alert-success" role="alert">
+               {{message}}
+            </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+    <div class="container">
+        <div class="book-info-details d-flex justify-content-center align-items-start gap-4">
+         
+            <img src="{{book.book_picture.url}}" alt="">
+            <div class="text">
+                <h1 class="title fw-bold">{{book.book_title}} 
+                    {% if book.book_subtitle  %}
+                    - {{book.book_subtitle}} -
+                    {% endif %}
+                </h1>
+                <h3 class="price">{{book.book_price}} دج</h3>
+                <div class="description ">
+                    <p class="fw-semibold">{{book.book_discription_summary|striptags|safe }} </p>
+                </div>
+                <form class="add-to-cart d-flex justify-content-between align-items-center gap-4" method="POST" action="{% url 'add-book-to-cart' book.pk %}">
+                        {% csrf_token %}    
+                        <div class="quntity">
+                            <button class="plus" id="quntity-add">+</button>
+                            <input type="number" value="2" name="quntity-number" id="">
+                            <button class="mins" id="quntity-min">-</button>
+                        </div>
+                        <input class="add-to-cart-btn" type="submit" value="اضف الى السلة" name="add_to_cart" >
+                </form>
+            </div>
+      
+        </div>
+        <div class="tabs d-flex justify-content-center align-items-start my-5">
+            <nav>
+                <div class="tab-header nav nav-tabs d-flex flex-column justify-content-center align-items-start"
+                    id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                        aria-selected="true">وصف الكتاب</button>
+                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">معلومات
+                        إضافية</button>
+                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">مراجعات
+                        الكتاب</button>
+                    <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled"
+                        aria-selected="false">فهرس الكتاب</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+                    tabindex="0">
+                    <h1>وصف الكتاب</h1>
+                    <div class="text">
+                       <p>{{book.book_discription|safe }}</p>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+                    tabindex="0">
+                    <h1>معلومات إضافية</h1>
+                    <div class="text">
+                        <div class="author d-flex justify-content-start align-items-center gap-2">
+                                {% if book.book_author %}
+                                <p class="fw-bold">تأليف :</p>
+                                <p>{{book.book_author}}</p>
+                                {% endif %}
+                        </div>
+                        <div class="tralslate d-flex justify-content-start align-items-center gap-2">
+                            {% if book.Book_translator %}
+                                <p class="fw-bold">ترجمة :</p>
+                                <p>{{book.Book_translator }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="year d-flex justify-content-start align-items-center gap-2">
+                            {% if book.book_date_published %}
+                                <p class="fw-bold">سنة النشر :</p>
+                                <p>{{book.yearpublished}}</p>                                
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"
+                    tabindex="0">
+                    <h1>مراجعات الكتاب</h1>
+                    <div class="text">
+                        <div class="alert alert-primary" role="alert">
+                            لم يتم إضافة مراجعات لهذا الكتاب
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab"
+                    tabindex="0">
+                    <h1>فهرس الكتاب</h1>
+                    <div class="text">
+                        {% if book.book_index %}
+                        <iframe src="{{ book.book_index.url }}#toolbar=0&zoom=150" width="100%" height="600px"></iframe>
+                        {% comment %} <embed src="{{ book.book_index.url }}" type="application/pdf" width="100%" height="600px" /> {% endcomment %}
+
+                        {% else %}                              
+                        <div class="alert alert-primary" role="alert">
+                            لم يتم إضافة فهرس لهذا الكتاب
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="comments my-5">
+            <div class="container">
+                <h1 class="section-title mb-5">تعليقات حول الكتاب</h1>
+                {% if comments.count > 0 %}   
+                <div class="boxes">
+                    {% for comment in comments %}
+                        <div class="box my-5">
+                            <p class="author fs-4"><b>{{comment.commentator_name}}</b> في<b> 5 مارس 2023</b></p>
+                            <div class="rating">
+                                <ul class="d-flex justify-content-start align-items-center p-0">
+                                    <li><i class="{% if comment.commentator_rating > 0 %} fas {% else %} far {% endif %} fa-star fa-lg"></i></li>
+                                    <li><i class="{% if comment.commentator_rating > 1 %} fas {% else %} far {% endif %} fa-star fa-lg"></i></li>
+                                    <li><i class="{% if comment.commentator_rating > 2 %} fas {% else %} far {% endif %} fa-star fa-lg"></i></li>
+                                    <li><i class="{% if comment.commentator_rating > 3 %} fas {% else %} far {% endif %} fa-star fa-lg"></i></li>
+                                    <li><i class="{% if comment.commentator_rating > 4 %} fas {% else %} far {% endif %} fa-star fa-lg"></i></li>
+                                </ul>
+                            </div>
+                            <p class="comment-body fs-5">{{comment.comments_body}}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <h1 class=" mt-0 mb-5">لا توجد تعليقات حول هذا الكتاب</h1>
+                {% endif %}
+                <div class="write-comment">
+                    <h1 class="title fw-bold">أترك تعليقا حول الكتاب</h1>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="box-comment full-name">
+                            <label for="full-name">{{form.commentator_name.label}} :</label>
+                            {{form.commentator_name}}
+                        </div>
+                        <div class="box-comment email">
+                            <label for="email">{{form.commentator_email.label}} :</label>
+                            {{form.commentator_email}}
+                        </div>
+                        <div class="box-comment rating">
+                            <label for="">قيم الكتاب :</label>
+                            <div class="rating-stars">
+                                <input class="rating" type="radio" name="rating" id="rating5" value="5" required>
+                                <label class="rating" for="rating5" title="5"></label>
+                                <input class="rating" type="radio" name="rating" id="rating4" value="4" required>
+                                <label class="rating" class="rating" for="rating4" title="4"></label>
+                                <input class="rating" type="radio" name="rating" id="rating3" value="3" required>
+                                <label class="rating" for="rating3" title="3"></label>
+                                <input class="rating" type="radio" name="rating" id="rating2" value="2" required>
+                                <label class="rating" for="rating2" title="2"></label>
+                                <input class="rating" type="radio" name="rating" id="rating1" value="1" required
+                                    checked>
+                                <label class="rating" for="rating1" title="1"></label>
+                            </div>
+                        </div>
+                        <div class="box-comment comment-body">
+                            <label for="comment-body">{{form.comments_body.label}} :</label>
+                            {{form.comments_body}}
+                        </div> 
+                        <div class="comment-btn">
+                            <input class="publish-your-book-btn" type="submit" value="أدخل التعليق">
+                        </div>
+>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock BookInfo %}
+
+{% block OtherBooks %}
+
+
+ <!-- Start other book -->
+ <div class="other-book">
+    <div class="container">
+        <h1 class="section-title mb-5">مؤلفات من نفس النوع</h1>
+        <div class="books">
+           {% if books.count > 0 %}
+            <div dir="rtl" class="last-release-section swiper-container swiper swiper1">
+                <div class="swiper-wrapper">
+                   {% for book in books %}
+                    <div class="swiper-slide">
+                        <a href="{% url 'single-book' book.book_title|remove_spaces %}" class="text-decoration-none">
+                            <img src="{{book.book_picture.url}}" alt="">
+                            <div class="text">
+                                <h1 class="categiory fs-5 fw-medium">{{book.book_category}}</h1>
+                                <h1 class="title fs-5 mb-2 fw-bold">{{book.book_title}}</h1>
+                                <h1 class="title fs-6 fw-bold">{{book.book_subtitle}}</h1>
+                                <p class="price">1500 دج</p>
+                            </div>
+                        </a>
+                    </div>
+                   {% endfor %}
+                </div>
+                <div class="swiper-button-next swiper-button-next1 change-background"></div>
+                <div class="swiper-button-prev swiper-button-prev1 change-background"></div>
+            </div>
+           {% else %}
+            <h1 class=" text-center my-5">لا يوجد مؤلفات من نفس النوع حاليا</h1>
+           {% endif %}
+        </div>
+    </div>
+</div>
+<!-- End other book -->
+
+
+{% endblock OtherBooks %}
